@@ -67,6 +67,6 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "Everything-is-a-Hazard.slnx",
+    "dotnet.defaultSolution": "Everything is a Hazard.slnx",
     "dotnet.enableWorkspaceBasedDevelopment": false
 }
