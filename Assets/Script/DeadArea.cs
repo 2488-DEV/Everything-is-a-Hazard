@@ -43,7 +43,12 @@ public class DeadArea : MonoBehaviour
                 Debug.Log("ครบเวลาแล้ว!");
                 player.isControlLocked = false;
                 player.transform.position = respawnPoint.position;
+                player.transform.rotation = Quaternion.Euler(0f , 0f , 0f);
                 hazard.ResetState();
+                hazard.hasAnim = false;
+                hazard.hasPAnim = false;
+                player.deathCount += 1;
+                player.UpdateDeathCount();
             }
         }
     }

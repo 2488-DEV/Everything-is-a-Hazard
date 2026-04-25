@@ -1,21 +1,26 @@
 using UnityEngine;
-
 public class VendingMachine : Hazard
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+{  
     void Start()
     {
-
+        
     }
-
-    // Update is called once per frame
     void Update()
     {
         if (timeToWait > 0)
-        {   
-            if (timeToWait >= delayTime)
-            {
-                ResetState();
+        {  
+            if (timeToWait >= playerAnimTime && !hasPAnim)
+                {
+                    player.transform.position = savedPosition;
+                    player.transform.position += playerOffset;
+                    player.transform.rotation = playerRotation;
+                    hasPAnim = true;
+                }
+            if (timeToWait >= hazardAnimTime && !hasAnim)
+            {  
+                transform.position += hazardOffset;
+                transform.rotation = hazardRotation;
+                hasAnim = true;
             }
         }
     }
