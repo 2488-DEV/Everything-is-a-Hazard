@@ -3,33 +3,59 @@ using UnityEngine;
 public class DeadArea : MonoBehaviour
 {
     public bool isInRange;
+    private float timeToWait = 0f;
+    private PlayerScript player;
+    private Hazard hazard;
+
+    private Transform respawnPoint;
+
+    void Start()
+    {
+        hazard = GetComponentInParent<Hazard>();
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+        {
+            player = playerObj.GetComponent<PlayerScript>();
+        }
+
+        if (respawnPoint == null)
+        {
+            GameObject respawnObj = GameObject.Find("RespawnPoint");
+            if (respawnObj != null)
+            {
+                respawnPoint = respawnObj.transform;
+            }
+        }
+    }
+    void Update()
+    {
+        if (timeToWait > 0)
+        {
+            timeToWait -= Time.deltaTime;
+            hazard.timeToWait += Time.deltaTime;
+
+            Debug.Log("เวลาที่เหลือ: " + timeToWait.ToString("f2"));
+
+            if (timeToWait <= 0)
+            {
+                timeToWait = 0;
+                hazard.timeToWait = 0;
+                Debug.Log("ครบเวลาแล้ว!");
+                player.isControlLocked = false;
+                player.transform.position = respawnPoint.position;
+                hazard.ResetState();
+            }
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
-{
-    if (other.CompareTag("Player"))
     {
-        // สั่งหยุด Player ตัวที่เข้ามาเหยียบโดยตรง
-        var player = other.GetComponent<PlayerScript>(); // เปลี่ยนชื่อสคริปต์ให้ตรงกับของคุณ
-        if (player != null) {
-            player.isControlLocked = true; 
-        }
-        SpriteRenderer parentRenderer = transform.parent.GetComponent<SpriteRenderer>();
-        if (parentRenderer != null)
+        if (other.CompareTag("Player"))
         {
-            parentRenderer.enabled = false; // ปิดการวาดภาพ (หายตัว)
+            if (player != null) {
+                player.isControlLocked = true; 
+                timeToWait = hazard.delayTime;
+            }
         }
     }
-}
-
-private void OnTriggerExit2D(Collider2D other)
-{
-    if (other.CompareTag("Player"))
-    {
-        var player = other.GetComponent<PlayerScript>();
-        if (player != null) {
-            player.isControlLocked = true;
-        }
-        
-    }
-}
 }
