@@ -1,0 +1,123 @@
+using UnityEngine;
+
+public class PlantScript : MonoBehaviour
+{
+    public bool IsInRange;
+    public enum PlantState { Empty, Dead, Dehydrated, Fresh }
+    public PlantState currentStage;
+
+    private PlayerScript player;
+    private StaminaBar staminaBar;
+    private WaterRefillSystem waterSystem;
+    private PlayerSound playerSound;
+
+    void Start()
+    {
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+        {
+            player = playerObj.GetComponent<PlayerScript>();
+            waterSystem = playerObj.GetComponent<WaterRefillSystem>();
+            playerSound = playerObj.GetComponent<PlayerSound>();
+        }
+        staminaBar = FindFirstObjectByType<StaminaBar>();
+    }
+
+    void Update()
+    {
+        if (!IsInRange || player == null || PlayerActionManager.Instance.IsPerformingAction)
+        {
+            UpdateVisuals();
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (staminaBar != null && staminaBar.currentStamina < 10f) return;
+
+            // 1. ขุดซากกองเถ้า (ต้องถือพลั่ว)
+            if (currentStage == PlantState.Dead && player.IsShovel)
+            {
+                PlayerActionManager.Instance.TryStartAction(ActionType.Dig, () => {
+                    HandlePlantLogic(ActionType.Dig);
+                    if (playerSound != null) playerSound.PlayActionSound("Dig");
+                });
+            }
+            // 2. ปลูกเมล็ด (ห้ามถือพลั่ว + ต้องมีเมล็ดอย่างน้อย 1)
+            else if (currentStage == PlantState.Empty && !player.IsShovel && player.seed >= 1)
+            {
+                PlayerActionManager.Instance.TryStartAction(ActionType.PlantSeed, () => {
+                    // ใช้ฟังก์ชัน UseSeed เพื่อตัดยอดและอัปเดต UI ทันทีกวัก!
+                    player.UseSeed();
+                    HandlePlantLogic(ActionType.PlantSeed);
+                    if (playerSound != null) playerSound.PlayActionSound("Plant");
+                });
+            }
+            // 3. รดน้ำ (ห้ามถือพลั่ว + ต้องมีน้ำพอ)
+            else if (currentStage == PlantState.Dehydrated && !player.IsShovel)
+            {
+                if (waterSystem != null && waterSystem.currentWater >= 33f)
+                {
+                    PlayerActionManager.Instance.TryStartAction(ActionType.Water, () => {
+                        waterSystem.UseWaterForPlanting();
+                        HandlePlantLogic(ActionType.Water);
+
+                        // ปลูกสำเร็จจน Fresh แล้ว ให้ลดจำนวนต้นไม้ที่เหลือในด่านกวัก!
+                        player.DecreaseTree();
+
+                        if (playerSound != null) playerSound.PlayActionSound("Water");
+                    });
+                }
+            }
+        }
+        UpdateVisuals();
+    }
+
+    void HandlePlantLogic(ActionType action)
+    {
+        switch (action)
+        {
+            case ActionType.Dig:
+                currentStage = PlantState.Empty;
+                break;
+            case ActionType.PlantSeed:
+                currentStage = PlantState.Dehydrated;
+                break;
+            case ActionType.Water:
+                currentStage = PlantState.Fresh;
+                break;
+        }
+
+        if (staminaBar != null)
+        {
+            staminaBar.currentStamina -= 10f;
+        }
+    }
+
+    // --- Visuals เหมือนเดิมเป๊ะ ไม่พังแน่นอนกวัก ---
+    void UpdateVisuals()
+    {
+        SetPlantActive("DeadPlant", currentStage == PlantState.Dead);
+        SetPlantActive("DehydratedPlant (lower)", currentStage == PlantState.Dehydrated);
+        SetPlantActive("DehydratedPlant (upper)", currentStage == PlantState.Dehydrated);
+        SetPlantActive("FreshPlant (lower)", currentStage == PlantState.Fresh);
+        SetPlantActive("FreshPlant (upper)", currentStage == PlantState.Fresh);
+        SetPlantActive("Hitbox", currentStage == PlantState.Fresh);
+    }
+
+    void SetPlantActive(string name, bool isActive)
+    {
+        Transform t = transform.Find(name);
+        if (t != null) t.gameObject.SetActive(isActive);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player")) IsInRange = true;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player")) IsInRange = false;
+    }
+}
