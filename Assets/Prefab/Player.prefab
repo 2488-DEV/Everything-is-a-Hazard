@@ -117,7 +117,7 @@ MonoBehaviour:
   walkSource: {fileID: 5509594103658744793}
   sfx: {fileID: 8300000, guid: cd4d642d6fa528f4bae0bc84375cccdf, type: 3}
   deathCount: 0
-  deathText: {fileID: 0}
+  deathText: {fileID: 3082676667556461504, guid: 25234f793ddfc7d499bcec4ca5f392bc, type: 3}
   speed: 5
   isControlLocked: 0
 --- !u!50 &3720777513894853361

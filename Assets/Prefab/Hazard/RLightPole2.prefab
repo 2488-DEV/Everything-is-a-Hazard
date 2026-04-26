@@ -92,6 +92,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInRange: 0
+  fadeController: {fileID: 0}
   actionSource: {fileID: 0}
   sfx: {fileID: 8300000, guid: da91a0133dd8b9b46ac17a289c4424be, type: 3}
 --- !u!1 &5479700209039987638
@@ -204,7 +205,7 @@ MonoBehaviour:
   savedPosition: {x: 0, y: 0, z: 0}
   savedRotation: {x: 0, y: 0, z: 0, w: 0}
   actionSource: {fileID: 0}
-  sfx: {fileID: 0}
+  sfx: {fileID: 8300000, guid: 638f92ead9800f54eb9057baaad7d995, type: 3}
   hazardOffset: {x: 1.786, y: -1.035, z: 0}
   hazardRotation: {x: 0, y: 0, z: 0.70710677, w: -0.70710677}
   hazardAnimTime: 1

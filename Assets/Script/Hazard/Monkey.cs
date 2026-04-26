@@ -7,6 +7,7 @@ public class Monkey : Hazard
     public bool isSound = false;
     private SpriteRenderer spriteRenderer;
     public RawImage myRawImage;
+    public AudioClip therock;
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -31,7 +32,7 @@ public class Monkey : Hazard
             if (timeToWait >= hazardAnimTime && !hasAnim)
             {  
                 myRawImage.enabled = true;
-                transform.position += hazardOffset;
+                actionSource.PlayOneShot(therock);
                 transform.rotation = hazardRotation;
                 hasAnim = true;
             }

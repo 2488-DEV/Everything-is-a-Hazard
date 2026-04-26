@@ -92,5 +92,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInRange: 0
-  actionSource: {fileID: 0}
+  fadeController: {fileID: 5554377225264819087, guid: e38766760cb220e4b8a82268ce80bfe3, type: 3}
+  actionSource: {fileID: 580202363779438651, guid: b88b258d2ce884846adeef49c66964e2, type: 3}
   sfx: {fileID: 8300000, guid: da91a0133dd8b9b46ac17a289c4424be, type: 3}
