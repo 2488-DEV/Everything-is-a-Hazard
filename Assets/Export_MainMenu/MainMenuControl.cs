@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement; // สำคัญมากสำหรับโหลดฉากกวัก!
+using UnityEngine.SceneManagement;
+using System.Collections; // ต้องมีอันนี้เพื่อใช้ Coroutine กวัก!
 
 public class MainMenuControl : MonoBehaviour
 {
@@ -24,7 +25,6 @@ public class MainMenuControl : MonoBehaviour
 
     void Start()
     {
-        // --- 1. จัดการระบบ BGM ---
         float savedBgm = PlayerPrefs.GetFloat("BGMVolume", 0.5f);
         if (bgmSlider != null)
         {
@@ -33,7 +33,6 @@ public class MainMenuControl : MonoBehaviour
         }
         SetBGMVolume(bgmSlider != null ? bgmSlider.value : 1f);
 
-        // --- 2. จัดการระบบ SFX ---
         float savedSfx = PlayerPrefs.GetFloat("SFXVolume", 0.8f);
         if (sfxSlider != null)
         {
@@ -46,16 +45,34 @@ public class MainMenuControl : MonoBehaviour
         AudioListener.volume = 1.0f;
     }
 
-    // --- ฟังก์ชันโหลด Scene แบบพิมพ์ชื่อเอาเองใน Unity กวัก! ---
+    // --- ฟังก์ชันใหม่: เรียกใช้จากปุ่ม Start เพื่อดีเลย์ 2 วิกวัก! ---
+    public void StartWithDelay(string sceneName)
+    {
+        StartCoroutine(DelaySceneLoad(sceneName));
+    }
+
+    private IEnumerator DelaySceneLoad(string sceneName)
+    {
+        if (string.IsNullOrEmpty(sceneName))
+        {
+            Debug.LogError("นายลืมพิมพ์ชื่อ Scene ในช่อง OnClick หรือเปล่ากวัก?!");
+            yield break;
+        }
+
+        Debug.Log("รอ 2 วินาทีก่อนเปลี่ยน Scene กวัก...");
+
+        // ใส่ดีเลย์ตรงนี้เลย 2 วิกวัก!
+        yield return new WaitForSeconds(2.0f);
+
+        SceneManager.LoadScene(sceneName);
+    }
+
+    // ฟังก์ชันเดิมยังอยู่เผื่อใช้โหลดทันทีกวัก
     public void LoadTargetScene(string sceneName)
     {
         if (!string.IsNullOrEmpty(sceneName))
         {
             SceneManager.LoadScene(sceneName);
-        }
-        else
-        {
-            Debug.LogError("นายลืมพิมพ์ชื่อ Scene ในช่อง OnClick หรือเปล่ากวัก?!");
         }
     }
 
@@ -89,20 +106,19 @@ public class MainMenuControl : MonoBehaviour
         PlayerPrefs.SetFloat("SFXVolume", sliderValue);
     }
 
-    // --- ระบบจัดการหน้าจอ (ตัด LevelSelect ออกแล้วกวัก!) ---
     public void OpenSetting()
     {
         CloseAllPanels();
         if (settingPanel != null) settingPanel.SetActive(true);
     }
 
-    public void OpenInformation() // เพิ่มฟังก์ชันเปิด Info ให้ด้วยกวัก
+    public void OpenInformation()
     {
         CloseAllPanels();
         if (informationPanel != null) informationPanel.SetActive(true);
     }
 
-    public void OpenHowToPlay() // เพิ่มฟังก์ชันเปิด HowToPlay ให้ด้วยกวัก
+    public void OpenHowToPlay()
     {
         CloseAllPanels();
         if (howToPlayPanel != null) howToPlayPanel.SetActive(true);

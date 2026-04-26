@@ -19,7 +19,7 @@ public class VNDialogue : MonoBehaviour
     public float typingSpeed = 0.04f;
 
     [Header("Trigger Settings")]
-    public bool playOnStart = false;
+    public bool playOnStart = true; // ตั้งเป็น true ไว้เลยกวัก!
     private bool hasPlayed = false;
     private Coroutine typingCoroutine;
 
@@ -28,33 +28,38 @@ public class VNDialogue : MonoBehaviour
 
     void Start()
     {
-        dialogueBox.SetActive(false);
-        isTyping = false;
+        // รีเซ็ตค่าใหม่ทุกครั้งที่เริ่ม Scene กวัก!
         index = 0;
+        isTyping = false;
 
         if (playOnStart)
         {
             StartConversation();
         }
+        else
+        {
+            if (dialogueBox != null) dialogueBox.SetActive(false);
+        }
     }
 
-    // --- ฟังก์ชันใหม่สำหรับรับข้อมูลจากสคริปต์ DialogueTrigger (บ่อน้ำ) ---
-    public void StartTriggerDialogue(string name, string[] newSentences)
+    public void StartConversation()
     {
-        nameText.text = name;
-        sentences = newSentences;
+        if (sentences == null || sentences.Length == 0) return;
 
         hasPlayed = true;
         index = 0;
-        dialogueBox.SetActive(true);
+
+        if (dialogueBox != null) dialogueBox.SetActive(true); // เปิดกล่องคำพูดกวัก!
 
         if (typingCoroutine != null) StopCoroutine(typingCoroutine);
         typingCoroutine = StartCoroutine(TypeText(sentences[index]));
     }
 
+    // --- ส่วนการทำงานหลักเหมือนเดิมแต่เช็ค Error ให้ละเอียดขึ้นกวัก ---
+
     void Update()
     {
-        if (dialogueBox.activeInHierarchy && Input.GetKeyDown(KeyCode.Space))
+        if (dialogueBox != null && dialogueBox.activeInHierarchy && Input.GetKeyDown(KeyCode.Space))
         {
             if (isTyping)
             {
@@ -71,29 +76,6 @@ public class VNDialogue : MonoBehaviour
         }
     }
 
-    // ใช้สำหรับ Trigger ภายในตัวเอง (ถ้ามี)
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player") && !hasPlayed && !dialogueBox.activeInHierarchy)
-        {
-            StartConversation();
-            if (GetComponent<BoxCollider2D>() != null)
-            {
-                GetComponent<BoxCollider2D>().enabled = false;
-            }
-        }
-    }
-
-    void StartConversation()
-    {
-        hasPlayed = true;
-        index = 0;
-        dialogueBox.SetActive(true);
-
-        if (typingCoroutine != null) StopCoroutine(typingCoroutine);
-        typingCoroutine = StartCoroutine(TypeText(sentences[index]));
-    }
-
     IEnumerator TypeText(string line)
     {
         isTyping = true;
@@ -101,16 +83,13 @@ public class VNDialogue : MonoBehaviour
 
         foreach (char letter in line.ToCharArray())
         {
-            if (!dialogueBox.activeInHierarchy) yield break;
+            if (dialogueBox == null || !dialogueBox.activeInHierarchy) yield break;
 
             contentText.text += letter;
 
             if (letter != ' ' && typingSound != null && audioSource != null)
             {
-                if (!audioSource.isPlaying)
-                {
-                    audioSource.PlayOneShot(typingSound);
-                }
+                if (!audioSource.isPlaying) audioSource.PlayOneShot(typingSound);
             }
             yield return new WaitForSeconds(typingSpeed);
         }
@@ -120,7 +99,7 @@ public class VNDialogue : MonoBehaviour
     void FinishLineImmediately()
     {
         if (typingCoroutine != null) StopCoroutine(typingCoroutine);
-        contentText.text = sentences[index];
+        if (index < sentences.Length) contentText.text = sentences[index];
         isTyping = false;
     }
 
@@ -134,7 +113,25 @@ public class VNDialogue : MonoBehaviour
         }
         else
         {
-            dialogueBox.SetActive(false);
+            if (dialogueBox != null) dialogueBox.SetActive(false);
+            Debug.Log("จบการสนทนาแล้วนาย!");
+        }
+    }
+
+    public void StartTriggerDialogue(string name, string[] newSentences)
+    {
+        if (nameText != null) nameText.text = name;
+        sentences = newSentences;
+        StartConversation();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player") && !hasPlayed)
+        {
+            StartConversation();
+            BoxCollider2D col = GetComponent<BoxCollider2D>();
+            if (col != null) col.enabled = false;
         }
     }
 }
