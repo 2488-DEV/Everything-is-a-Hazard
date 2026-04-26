@@ -10,7 +10,7 @@ public class QuitGame : MonoBehaviour
 
     IEnumerator DelayedQuit()
     {
-        yield return new WaitForSeconds(1f); // หน่วงเวลา 1 วินาที
+        yield return new WaitForSeconds(2f); // หน่วงเวลา 1 วินาที
 
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
