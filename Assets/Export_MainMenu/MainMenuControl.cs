@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement; // สำคัญมากสำหรับโหลดฉากกวัก!
 
 public class MainMenuControl : MonoBehaviour
 {
@@ -8,7 +9,6 @@ public class MainMenuControl : MonoBehaviour
     public GameObject settingPanel;
     public GameObject informationPanel;
     public GameObject howToPlayPanel;
-    public GameObject levelSelectPanel;
 
     [Header("Audio Mixer")]
     public AudioMixer myMixer;
@@ -20,7 +20,6 @@ public class MainMenuControl : MonoBehaviour
 
     [Header("SFX Settings")]
     public Slider sfxSlider;
-    // เพิ่มช่องสำหรับลาก AudioSource ที่จะใช้เล่นเสียงปุ่มกวัก
     public AudioSource sfxSource;
 
     void Start()
@@ -47,7 +46,19 @@ public class MainMenuControl : MonoBehaviour
         AudioListener.volume = 1.0f;
     }
 
-    // --- ฟังก์ชันใหม่สำหรับเล่นเสียงแยกตามไฟล์ที่ใส่มากวัก! ---
+    // --- ฟังก์ชันโหลด Scene แบบพิมพ์ชื่อเอาเองใน Unity กวัก! ---
+    public void LoadTargetScene(string sceneName)
+    {
+        if (!string.IsNullOrEmpty(sceneName))
+        {
+            SceneManager.LoadScene(sceneName);
+        }
+        else
+        {
+            Debug.LogError("นายลืมพิมพ์ชื่อ Scene ในช่อง OnClick หรือเปล่ากวัก?!");
+        }
+    }
+
     public void PlayCustomSound(AudioClip clip)
     {
         if (sfxSource != null && clip != null)
@@ -78,17 +89,23 @@ public class MainMenuControl : MonoBehaviour
         PlayerPrefs.SetFloat("SFXVolume", sliderValue);
     }
 
-    // --- ระบบจัดการหน้าจอ (เอาปุ่มเก่าออกเพื่อให้เรียกผ่าน OnClick แทนกวัก) ---
-    public void OpenLevelSelect()
-    {
-        CloseAllPanels();
-        if (levelSelectPanel != null) levelSelectPanel.SetActive(true);
-    }
-
+    // --- ระบบจัดการหน้าจอ (ตัด LevelSelect ออกแล้วกวัก!) ---
     public void OpenSetting()
     {
         CloseAllPanels();
         if (settingPanel != null) settingPanel.SetActive(true);
+    }
+
+    public void OpenInformation() // เพิ่มฟังก์ชันเปิด Info ให้ด้วยกวัก
+    {
+        CloseAllPanels();
+        if (informationPanel != null) informationPanel.SetActive(true);
+    }
+
+    public void OpenHowToPlay() // เพิ่มฟังก์ชันเปิด HowToPlay ให้ด้วยกวัก
+    {
+        CloseAllPanels();
+        if (howToPlayPanel != null) howToPlayPanel.SetActive(true);
     }
 
     public void CloseAllPanels()
@@ -96,7 +113,6 @@ public class MainMenuControl : MonoBehaviour
         if (settingPanel != null) settingPanel.SetActive(false);
         if (informationPanel != null) informationPanel.SetActive(false);
         if (howToPlayPanel != null) howToPlayPanel.SetActive(false);
-        if (levelSelectPanel != null) levelSelectPanel.SetActive(false);
     }
 
     public void QuitGame()
