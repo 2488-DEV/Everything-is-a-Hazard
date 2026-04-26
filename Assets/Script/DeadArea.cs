@@ -6,7 +6,6 @@ public class DeadArea : MonoBehaviour
     private float timeToWait = 0f;
     private PlayerScript player;
     private Hazard hazard;
-
     private Transform respawnPoint;
 
     void Start()
@@ -49,6 +48,7 @@ public class DeadArea : MonoBehaviour
                 hazard.hasPAnim = false;
                 player.deathCount += 1;
                 player.UpdateDeathCount();
+                hazard.playerRenderer.enabled = true;
             }
         }
     }
