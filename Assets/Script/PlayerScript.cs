@@ -5,7 +5,7 @@ public class PlayerScript : MonoBehaviour
     public Rigidbody2D rb;
     public Vector2 moveInput;
     public SpriteRenderer spriteRenderer;
-    public Animator animator;
+    
 
     public DeadArea deadArea;
 
@@ -44,11 +44,11 @@ public class PlayerScript : MonoBehaviour
             // Animation Logic
             if (moveInput != Vector2.zero)
             {
-                animator.SetBool("IsRunning", true);
+          
             }
             else
             {
-                animator.SetBool("IsRunning", false);
+             
             }
 
             if (moveInput.x != 0)
@@ -60,7 +60,7 @@ public class PlayerScript : MonoBehaviour
         {
             rb.linearVelocity = Vector2.zero;
             isPlayerRunning = false;
-            animator.SetBool("IsRunning", false);
+          
         }
     }
 }
