@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 28
-  productGUID: 00000000000000000000000000000000
+  productGUID: 1368e1e5224387b4e90d05271d5b9f34
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -937,7 +937,7 @@ PlayerSettings:
   cloudProjectId: 52609af5-43b4-426b-9a10-4ab9bf9cbbba
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
+  projectName: Everything is a Hazard
   organizationId: wongsathornsirisombat
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
