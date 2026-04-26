@@ -1,113 +1,72 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
-using System.Collections; // จำเป็นต้องมีเพื่อใช้ Coroutine กวัก!
 
 public class PlayerScript : MonoBehaviour
 {
-    public bool IsShovel;
+    public Rigidbody2D rb;
+    public Vector2 moveInput;
+    public SpriteRenderer spriteRenderer;
+    //public Animator animator;
 
-    [Header("Level Settings")]
-    [Tooltip("ใส่เลขด่านปัจจุบัน เช่น ด่าน 1 ใส่เลข 1 กวัก")]
-    public int currentLevelIndex;
+    public DeadArea deadArea;
 
-    [Header("Status Settings")]
-    public int seed;
-    public TextMeshProUGUI seedCount;
+    public int deathCount;
+    public TextMeshProUGUI deathText;
+    public float speed = 5f;
+    public float sprint = 3f;
 
-    public int tree;
-    public TextMeshProUGUI treeCount;
+    public bool isPlayerRunning = false;
+    public bool isControlLocked = false;
 
-    [Header("Victory Settings")]
-    public GameObject victoryPanel;
-
-    [Header("Movement State")]
-    public bool isLeft;
-    public bool isRight;
-
-    private WaterRefillSystem waterSystem;
-    private bool isWaitingForVictory = false; // ป้องกันการเรียก Coroutine ซ้ำกวัก
-
+    public void UpdateDeathCount() {
+        deathText.text = deathCount + "x";
+    }
     void Start()
     {
-        Time.timeScale = 1f;
-        waterSystem = GetComponent<WaterRefillSystem>();
-
-        if (victoryPanel != null)
-        {
-            victoryPanel.SetActive(false);
-        }
-
-        RefreshAllUI();
+        deathText.text = deathCount + "x";
     }
 
     void Update()
-    {
-        float move = Input.GetAxisRaw("Horizontal");
-        if (move != 0)
+    {   
+
+        moveInput.x = Input.GetAxisRaw("Horizontal");
+        moveInput.y = Input.GetAxisRaw("Vertical");
+        moveInput = moveInput.normalized;
+
+        if (!isControlLocked)
         {
-            isLeft = (move == -1);
-            isRight = (move == 1);
-        }
-    }
-
-    public void UpdateSeedCount() { if (seedCount != null) seedCount.text = "Seed : " + seed; }
-    public void UseSeed() { if (seed > 0) { seed--; UpdateSeedCount(); } }
-
-    public void DecreaseTree()
-    {
-        if (tree > 0)
-        {
-            tree -= 1;
-            UpdateTreeCount();
-
-            if (tree <= 0)
+            if (Input.GetKey(KeyCode.LeftShift) && moveInput != Vector2.zero)
             {
-                // ถ้าเป็นด่าน 3 และยังไม่ได้เริ่มรอ ให้เริ่มรอ 15 วิกวัก!
-                if (currentLevelIndex == 3 && !isWaitingForVictory)
-                {
-                    StartCoroutine(WaitBeforeWin(15f));
-                }
-                else if (currentLevelIndex != 3)
-                {
-                    WinGame();
-                }
+                rb.linearVelocity = moveInput * speed * sprint;
+                isPlayerRunning = true;
+
+            }
+            else
+            {
+                rb.linearVelocity = moveInput * speed;
+                isPlayerRunning = false;
+            }
+
+            // Animation Logic
+            if (moveInput != Vector2.zero)
+            {
+                //animator.SetBool("IsRunning", true);
+            }
+            else
+            {
+                //animator.SetBool("IsRunning", false);
+            }
+
+            if (moveInput.x != 0)
+            {
+                spriteRenderer.flipX = moveInput.x < 0;
             }
         }
-    }
-
-    public void UpdateTreeCount() { if (treeCount != null) treeCount.text = "Remaining : " + tree; }
-    public void RefreshAllUI() { UpdateSeedCount(); UpdateTreeCount(); }
-
-    // --- ฟังก์ชันพิเศษสำหรับด่านสุดท้ายกวัก ---
-    IEnumerator WaitBeforeWin(float seconds)
-    {
-        isWaitingForVictory = true;
-        Debug.Log("รดน้ำครบแล้ว! อีก " + seconds + " วินาทีจะจบเกมกวัก...");
-
-        // (Option) ถ้านายมี SunSystem ในเป็ด นายอาจจะสั่งปิดเพื่อให้เป็ดอมตะช่วงนี้กวัก
-        // GetComponent<SunSystem>().enabled = false; 
-
-        yield return new WaitForSeconds(seconds);
-        WinGame();
-    }
-
-    void WinGame()
-    {
-        int levelReached = PlayerPrefs.GetInt("levelReached", 1);
-        if (levelReached <= currentLevelIndex)
+        else
         {
-            PlayerPrefs.SetInt("levelReached", currentLevelIndex + 1);
-            PlayerPrefs.Save();
-            Debug.Log("ปลดล็อกด่านถัดไปเรียบร้อยกวัก!");
-        }
-
-        if (victoryPanel != null)
-        {
-            victoryPanel.SetActive(true);
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            Time.timeScale = 0f;
+            rb.linearVelocity = Vector2.zero;
+            isPlayerRunning = false;
+            //animator.SetBool("IsRunning", false);
         }
     }
 }
