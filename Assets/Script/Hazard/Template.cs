@@ -19,6 +19,7 @@ public class Template : Hazard
                 }
             if (timeToWait >= hazardAnimTime && !hasAnim)
             {  
+                actionSource.PlayOneShot(sfx);
                 transform.position += hazardOffset;
                 transform.rotation = hazardRotation;
                 hasAnim = true;

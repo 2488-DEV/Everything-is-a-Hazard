@@ -8,6 +8,9 @@ public class DeadArea : MonoBehaviour
     private Hazard hazard;
     private Transform respawnPoint;
 
+    [Header("Audio")]
+    public AudioSource actionSource;
+    public AudioClip sfx;
     void Start()
     {
         hazard = GetComponentInParent<Hazard>();
@@ -49,6 +52,7 @@ public class DeadArea : MonoBehaviour
                 player.deathCount += 1;
                 player.UpdateDeathCount();
                 hazard.playerRenderer.enabled = true;
+                actionSource.PlayOneShot(sfx);
             }
         }
     }

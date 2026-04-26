@@ -17,13 +17,14 @@ public class Honk : Hazard
             
             if (timeToWait >= playerAnimTime && !hasPAnim)
                 {
-                    transform.Find("Light1").gameObject.SetActive(true);
-                    transform.Find("Light2").gameObject.SetActive(true);
                     player.transform.rotation = playerRotation;
                     hasPAnim = true;
                 }
             if (timeToWait >= hazardAnimTime && !hasAnim)
             {  
+                actionSource.PlayOneShot(sfx);
+                transform.Find("Light1").gameObject.SetActive(true);
+                transform.Find("Light2").gameObject.SetActive(true);
                 transform.position += hazardOffset;
                 transform.rotation = hazardRotation;
                 hasAnim = true;

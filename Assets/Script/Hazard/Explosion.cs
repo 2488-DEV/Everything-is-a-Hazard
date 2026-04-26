@@ -15,7 +15,8 @@ public class Explosion : Hazard
         if (timeToWait > 0)
         {  
             if (timeToWait >= playerAnimTime && !hasPAnim)
-                {
+                {   
+                    
                     player.transform.position = savedPosition;
                     player.transform.position += playerOffset;
                     player.transform.rotation = playerRotation;
@@ -23,6 +24,7 @@ public class Explosion : Hazard
                 }
             if (timeToWait >= hazardAnimTime && !hasAnim)
             {  
+                actionSource.PlayOneShot(sfx);
                 transform.Find("Explosion").gameObject.SetActive(true);
                 transform.position += hazardOffset;
                 transform.rotation = hazardRotation;

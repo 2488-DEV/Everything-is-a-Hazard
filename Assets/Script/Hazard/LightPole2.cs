@@ -12,6 +12,7 @@ public class LightPole2 : Hazard
         {  
             if (timeToWait >= playerAnimTime && !hasPAnim)
                 {
+                    
                     player.transform.position = savedPosition;
                     player.transform.position += playerOffset;
                     player.transform.rotation = playerRotation;
@@ -19,6 +20,7 @@ public class LightPole2 : Hazard
                 }
             if (timeToWait >= hazardAnimTime && !hasAnim)
             {  
+                actionSource.PlayOneShot(sfx);
                 transform.position += hazardOffset;
                 transform.rotation = hazardRotation;
                 hasAnim = true;

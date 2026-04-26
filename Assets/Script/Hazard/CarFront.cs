@@ -16,12 +16,14 @@ public class CarFront : Hazard
             
             if (timeToWait >= playerAnimTime && !hasPAnim)
                 {
+                    
                     playerRenderer.enabled = false;
                     player.transform.rotation = playerRotation;
                     hasPAnim = true;
                 }
             if (timeToWait >= hazardAnimTime && !hasAnim)
             {  
+                actionSource.PlayOneShot(sfx);
                 transform.position += hazardOffset;
                 transform.rotation = hazardRotation;
                 hasAnim = true;

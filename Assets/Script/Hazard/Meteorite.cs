@@ -25,6 +25,7 @@ public class Meteorite : Hazard
                 }
             if (timeToWait >= hazardAnimTime && !hasAnim)
             {  
+                actionSource.PlayOneShot(sfx);
                 spriteRenderer.enabled = true;
                 transform.Find("Explosion").gameObject.SetActive(true);
                 transform.position += hazardOffset;
