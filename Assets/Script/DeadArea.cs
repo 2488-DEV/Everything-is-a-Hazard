@@ -6,9 +6,12 @@ public class DeadArea : MonoBehaviour
     private float timeToWait = 0f;
     private PlayerScript player;
     private Hazard hazard;
-
     private Transform respawnPoint;
+    public FadeController fadeController;
 
+    [Header("Audio")]
+    public AudioSource actionSource;
+    public AudioClip sfx;
     void Start()
     {
         hazard = GetComponentInParent<Hazard>();
@@ -43,7 +46,18 @@ public class DeadArea : MonoBehaviour
                 Debug.Log("ครบเวลาแล้ว!");
                 player.isControlLocked = false;
                 player.transform.position = respawnPoint.position;
+                player.transform.rotation = Quaternion.Euler(0f , 0f , 0f);
                 hazard.ResetState();
+                hazard.hasAnim = false;
+                hazard.hasPAnim = false;
+                player.deathCount += 1;
+                player.UpdateDeathCount();
+                hazard.playerRenderer.enabled = true;
+                actionSource.PlayOneShot(sfx);
+                player.spriteRenderer.sprite = player.directionSprites[2];
+                fadeController.fadeGroup.alpha = 1f;
+                fadeController.fadeGroup.gameObject.SetActive(true);
+                fadeController.StartFadeOut();
             }
         }
     }
@@ -55,6 +69,24 @@ public class DeadArea : MonoBehaviour
             if (player != null) {
                 player.isControlLocked = true; 
                 timeToWait = hazard.delayTime;
+                char firstLetter = transform.parent.name[0];
+                string pName = transform.parent.name;
+                if (firstLetter == 'L') 
+                {
+                    player.spriteRenderer.sprite = player.directionSprites[1];
+                }
+                else if (firstLetter == 'R') 
+                {
+                    player.spriteRenderer.sprite = player.directionSprites[0];
+                }
+                else if (pName.Contains("Up"))
+                {
+                    player.spriteRenderer.sprite = player.directionSprites[2];
+                }
+                else if (pName.Contains("Down"))
+                {
+                    player.spriteRenderer.sprite = player.directionSprites[3];
+                }
             }
         }
     }

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5646506259564521440
+--- !u!1 &126001403189441071
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1706823472878099671}
-  - component: {fileID: 7358844875046143656}
-  - component: {fileID: 2865913786081882476}
+  - component: {fileID: 5214615110024344361}
+  - component: {fileID: 400067080019855287}
+  - component: {fileID: 453104560301326377}
   m_Layer: 0
   m_Name: DeadArea
   m_TagString: Untagged
@@ -18,28 +18,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1706823472878099671
+--- !u!4 &5214615110024344361
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5646506259564521440}
+  m_GameObject: {fileID: 126001403189441071}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 6.6, y: 6.726, z: 0}
+  m_LocalScale: {x: 6, y: 6, z: 6}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &7358844875046143656
+--- !u!61 &400067080019855287
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5646506259564521440}
+  m_GameObject: {fileID: 126001403189441071}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -67,7 +67,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.003140092, y: -0.3783769}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -77,18 +77,21 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.25894636, y: 0.24324623}
   m_EdgeRadius: 0
---- !u!114 &2865913786081882476
+--- !u!114 &453104560301326377
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5646506259564521440}
+  m_GameObject: {fileID: 126001403189441071}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5cac72886c364234aa7294eb91936fec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isInRange: 0
+  fadeController: {fileID: 5554377225264819087, guid: e38766760cb220e4b8a82268ce80bfe3, type: 3}
+  actionSource: {fileID: 580202363779438651, guid: b88b258d2ce884846adeef49c66964e2, type: 3}
+  sfx: {fileID: 8300000, guid: da91a0133dd8b9b46ac17a289c4424be, type: 3}
