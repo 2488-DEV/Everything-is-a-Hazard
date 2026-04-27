@@ -6,10 +6,7 @@ public class PlayerScript : MonoBehaviour
     public Rigidbody2D rb;
     public Vector2 moveInput;
     public SpriteRenderer spriteRenderer;
-<<<<<<< HEAD
-
     public DeadArea deadArea;
-=======
     public Sprite[] directionSprites;
     
     [Header("Bobbing Settings")]
@@ -18,13 +15,13 @@ public class PlayerScript : MonoBehaviour
     [Header("Audio")]
     public AudioSource walkSource;
     public AudioClip sfx;
->>>>>>> JAMES
 
     public int deathCount;
     public TextMeshProUGUI deathText;
     public float speed = 5f;
 
     public bool isControlLocked = false;
+    public bool isPlayerRunning = false;
 
     public void UpdateDeathCount() {
         deathText.text = deathCount + "x";
@@ -42,19 +39,11 @@ public class PlayerScript : MonoBehaviour
 
         if (!isControlLocked)
         {
-            // เช็คว่ากดปุ่มเดินอยู่ไหม (เปรียบเทียบกับ Vector2.zero)
-            if (moveInput != Vector2.zero)
-            {
-<<<<<<< HEAD
-            }
-            else
-            {
-            }
+            isPlayerRunning = true;
 
-            if (moveInput.x != 0)
+            if (moveInput.x != 0 || moveInput.y != 0)
             {
-                spriteRenderer.flipX = moveInput.x < 0;
-=======
+                
                 // --- ส่วนของเสียงเดิน ---
                 if (!walkSource.isPlaying) // ถ้าลำโพงยังไม่ดัง
                 {
@@ -94,20 +83,17 @@ public class PlayerScript : MonoBehaviour
                     transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, Time.deltaTime * 10f);
                     walkSource.Stop();
                 }
->>>>>>> JAMES
             }
         }
         else
         {
             rb.linearVelocity = Vector2.zero;
-<<<<<<< HEAD
+
             isPlayerRunning = false;
-=======
             if (walkSource.isPlaying) 
             {
                 walkSource.Stop();
             }
->>>>>>> JAMES
         }
     }
 }

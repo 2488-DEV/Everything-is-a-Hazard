@@ -14,10 +14,9 @@ public class Explosion : Hazard
     {
         if (timeToWait > 0)
         {  
+            player.transform.position = savedPosition;
             if (timeToWait >= playerAnimTime && !hasPAnim)
                 {   
-                    
-                    player.transform.position = savedPosition;
                     player.transform.position += playerOffset;
                     player.transform.rotation = playerRotation;
                     hasPAnim = true;
