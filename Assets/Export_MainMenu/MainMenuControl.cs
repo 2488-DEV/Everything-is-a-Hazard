@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System.Collections; // ต้องมีอันนี้เพื่อใช้ Coroutine กวัก!
+using System.Collections;
 
 public class MainMenuControl : MonoBehaviour
 {
@@ -22,6 +22,27 @@ public class MainMenuControl : MonoBehaviour
     [Header("SFX Settings")]
     public Slider sfxSlider;
     public AudioSource sfxSource;
+
+    // --- ส่วนที่เพิ่มมาใหม่กวัก! ---
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (settingPanel != null)
+            {
+                // ถ้าเปิดอยู่ให้ปิด ถ้าปิดอยู่ให้เปิด
+                if (settingPanel.activeSelf)
+                {
+                    settingPanel.SetActive(false);
+                }
+                else
+                {
+                    OpenSetting(); // ใช้ฟังก์ชันเดิมของนายเพื่อปิด Panel อื่นก่อน
+                }
+            }
+        }
+    }
+    // -------------------------
 
     void Start()
     {
@@ -45,7 +66,6 @@ public class MainMenuControl : MonoBehaviour
         AudioListener.volume = 1.0f;
     }
 
-    // --- ฟังก์ชันใหม่: เรียกใช้จากปุ่ม Start เพื่อดีเลย์ 2 วิกวัก! ---
     public void StartWithDelay(string sceneName)
     {
         StartCoroutine(DelaySceneLoad(sceneName));
@@ -58,16 +78,11 @@ public class MainMenuControl : MonoBehaviour
             Debug.LogError("นายลืมพิมพ์ชื่อ Scene ในช่อง OnClick หรือเปล่ากวัก?!");
             yield break;
         }
-
         Debug.Log("รอ 2 วินาทีก่อนเปลี่ยน Scene กวัก...");
-
-        // ใส่ดีเลย์ตรงนี้เลย 2 วิกวัก!
         yield return new WaitForSeconds(2.0f);
-
         SceneManager.LoadScene(sceneName);
     }
 
-    // ฟังก์ชันเดิมยังอยู่เผื่อใช้โหลดทันทีกวัก
     public void LoadTargetScene(string sceneName)
     {
         if (!string.IsNullOrEmpty(sceneName))
