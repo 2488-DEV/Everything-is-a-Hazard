@@ -4,32 +4,6 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-  - enabled: 1
-<<<<<<< Updated upstream
-    path: Assets/Scenes/MainMenu.unity
-=======
-    path: Assets/Scenes/SampleScene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
-    path: Assets/last hope/MainMenu.unity
->>>>>>> Stashed changes
-    guid: a5a06ca349139534f8cc1094d2fc7747
-  - enabled: 1
-    path: Assets/last hope/IntroVideo.unity
-    guid: 2a8ef5395060fa24490c34c19cb0f61b
-  - enabled: 1
-<<<<<<< Updated upstream
-    path: Assets/Scenes/InGame.unity
-    guid: e9ad4b080a2f01344b5c7fed754ad175
-  - enabled: 1
-    path: Assets/Scenes/OuttroVideo.unity
-    guid: 9486d2bf4268ac54c9d295c603cccd67
+  m_Scenes: []
   m_configObjects: {}
-=======
-    path: Assets/898989/TestInGame.unity
-    guid: 80d8f1fcdabfbfb4c9b31e372d491938
-  m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
->>>>>>> Stashed changes
   m_UseUCBPForAssetBundles: 0
