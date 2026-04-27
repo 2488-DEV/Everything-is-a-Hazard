@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   introVideo: {fileID: 128303583}
-  nextSceneName: TestInGame
+  nextSceneName: InGame
 --- !u!328 &128303583
 VideoPlayer:
   m_ObjectHideFlags: 0
